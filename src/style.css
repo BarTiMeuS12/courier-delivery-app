@@ -139,7 +139,6 @@ button {
   cursor: pointer;
 }
 
-/* ---------- Окно "Информация о заказе" ---------- */
 .order-modal-overlay {
   position: fixed;
   inset: 0;
@@ -164,4 +163,37 @@ button {
 .order-modal ul {
   margin: 8px 0 16px;
   padding-left: 20px;
+}
+
+.app-navigation {
+  margin: 0 0 16px;
+}
+
+.app-navigation a {
+  color: #d81b60;
+  text-decoration: none;
+}
+
+.app-navigation a:hover {
+  text-decoration: underline;
+}
+
+.employees-section h1 {
+  margin-bottom: 20px;
+}
+
+.employees-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.employee-card {
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.employee-card h2 {
+  margin-top: 0;
 }
