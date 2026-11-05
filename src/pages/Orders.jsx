@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { couriers } from '../data/users.js';
 
-export default function Orders({ currentUser, orders, onTake, onHandOff, onLogout }) {
+// Заказы приходят из Redux-стора через props (контейнер — AppContent в App.jsx)
+export default function Orders({ currentUser, orders, onTake, onHandOff, onRemove, onLogout }) {
   const [infoOrder, setInfoOrder] = useState(null);
   const navigate = useNavigate();
 
@@ -32,6 +33,12 @@ export default function Orders({ currentUser, orders, onTake, onHandOff, onLogou
           </tr>
         </thead>
         <tbody>
+          {orders.length === 0 && (
+            <tr>
+              <td colSpan={3}>Заказов нет</td>
+            </tr>
+          )}
+
           {orders.map(order => {
             const isMine = order.courier === currentUser.name;
             const isFree = order.courier === null;
@@ -65,6 +72,12 @@ export default function Orders({ currentUser, orders, onTake, onHandOff, onLogou
                           </option>
                         ))}
                     </select>
+                  )}
+
+                  {isMine && (
+                    <button type="button" onClick={() => onRemove(order.id)}>
+                      Отказаться от заказа
+                    </button>
                   )}
 
                   <button type="button" onClick={() => setInfoOrder(order)}>

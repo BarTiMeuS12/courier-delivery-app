@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { takeOrder, handOffOrder } from "../action/ordersActions";
+import { takeOrder, handOffOrder, removeOrder } from "../action/ordersActions";
 import { initialOrders } from "../../data/orders";
 
 const setCourier = (state, action) => {
@@ -23,7 +23,10 @@ const ordersSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(takeOrder, setCourier)
-            .addCase(handOffOrder, setCourier);
+            .addCase(handOffOrder, setCourier)
+            .addCase(removeOrder, (state, action) => {
+                state.list = state.list.filter((o) => o.id !== action.payload);
+            });
     }
 });
 

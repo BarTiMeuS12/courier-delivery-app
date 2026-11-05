@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, Link } from 'react-router-dom';
 
 import store from './store/store';
 import { setUser, logoutUser } from './store/action/authActions';
-import { takeOrder, handOffOrder } from './store/action/ordersActions';
+import { takeOrder, handOffOrder, removeOrder } from './store/action/ordersActions';
 
 import Login from './employees/login/Login.jsx';
 import Orders from './pages/Orders.jsx';
@@ -20,6 +20,7 @@ function AppContent() {
     (state) => state.orders.list
   );
 
+  // пароль в стор не кладём
   const handleLogin = ({ password, ...user }) => {
     dispatch(setUser(user));
   };
@@ -35,6 +36,10 @@ function AppContent() {
   const handleHandOff = (id, courier) => {
     if (!courier) return;
     dispatch(handOffOrder({ id, courier }));
+  };
+
+  const handleRemove = (id) => {
+    dispatch(removeOrder(id));
   };
 
   return (
@@ -62,6 +67,7 @@ function AppContent() {
                 orders={orders}
                 onTake={handleTake}
                 onHandOff={handleHandOff}
+                onRemove={handleRemove}
                 onLogout={handleLogout}
               />
             </>
