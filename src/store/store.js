@@ -1,13 +1,15 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 import authReducer from "./slices/auth";
-import employeeReducer from "./slices/employee";
+import ordersReducer from "./slices/orders";
+
+const rootReducer = combineReducers({
+    auth: authReducer,
+    orders: ordersReducer
+});
 
 const store = configureStore({
-    reducer: {
-        auth: authReducer,
-        employee: employeeReducer
-    },
+    reducer: rootReducer,
     devTools: true
 });
 

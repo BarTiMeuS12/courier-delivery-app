@@ -1,10 +1,4 @@
-import { useSelector } from 'react-redux';
-
-export default function ShowEmployee() {
-  const employees = useSelector(
-    (state) => state.employee.employees
-  );
-
+export default function ShowEmployee({ employees }) {
   if (employees.length === 0) {
     return <p>Сотрудники не найдены.</p>;
   }

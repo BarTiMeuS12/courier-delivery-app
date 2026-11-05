@@ -1,71 +1,54 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { findCourier } from '../../data/users.js';
 
-import { setUser, logoutUser } from "../../store/action/authActions";
+export default function Login({ onLogin }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-const Login = () => {
-    const dispatch = useDispatch();
+  function handleSubmit(e) {
+    e.preventDefault();
 
-    const user = useSelector(
-        (state) => state.auth.user
-    );
-
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
-    const handleLogin = (e) => {
-        e.preventDefault();
-
-        if (!email || !password) {
-            return;
-        }
-
-        dispatch(setUser({
-            email: email
-        }));
-    };
-
-    const handleLogout = () => {
-        dispatch(logoutUser());
-    };
-
-    if (user) {
-        return (
-            <div>
-                <h2>Welcome, {user.email}</h2>
-
-                <button onClick={handleLogout}>
-                    Logout
-                </button>
-            </div>
-        );
+    const courier = findCourier(email.trim(), password);
+    if (!courier) {
+      setError('Неверный email или пароль');
+      return;
     }
 
-    return (
-        <div>
-            <h2>Login</h2>
+    setError('');
+    onLogin(courier);
+    navigate('/orders');
+  }
 
-            <form onSubmit={handleLogin}>
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
+  return (
+    <div className="login-page">
+      <div className="login-card">
+        <h1>Добро пожаловать</h1>
+        <p className="login-subtitle">Войдите, чтобы начать работу</p>
 
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+        <form onSubmit={handleSubmit} noValidate>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            className="login-input"
+          />
+          <input
+            type="password"
+            placeholder="Пароль"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            className="login-input"
+          />
 
-                <button type="submit">
-                    Login
-                </button>
-            </form>
-        </div>
-    );
-};
+          {error && <p className="login-error">{error}</p>}
 
-export { default } from '../../pages/Login.jsx';
+          <button type="submit" className="login-btn">Войти</button>
+        </form>
+      </div>
+    </div>
+  );
+}

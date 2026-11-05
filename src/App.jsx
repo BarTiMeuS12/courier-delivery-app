@@ -1,11 +1,11 @@
-
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { Routes, Route, Navigate, Link } from 'react-router-dom';
 
 import store from './store/store';
 import { setUser, logoutUser } from './store/action/authActions';
+import { takeOrder, handOffOrder } from './store/action/ordersActions';
 
-import Login from './pages/Login.jsx';
+import Login from './employees/login/Login.jsx';
 import Orders from './pages/Orders.jsx';
 import Employees from './employees/Employees.jsx';
 
@@ -16,12 +16,25 @@ function AppContent() {
     (state) => state.auth.user
   );
 
-  const handleLogin = (user) => {
+  const orders = useSelector(
+    (state) => state.orders.list
+  );
+
+  const handleLogin = ({ password, ...user }) => {
     dispatch(setUser(user));
   };
 
   const handleLogout = () => {
     dispatch(logoutUser());
+  };
+
+  const handleTake = (id) => {
+    dispatch(takeOrder({ id, courier: currentUser.name }));
+  };
+
+  const handleHandOff = (id, courier) => {
+    if (!courier) return;
+    dispatch(handOffOrder({ id, courier }));
   };
 
   return (
@@ -46,6 +59,9 @@ function AppContent() {
 
               <Orders
                 currentUser={currentUser}
+                orders={orders}
+                onTake={handleTake}
+                onHandOff={handleHandOff}
                 onLogout={handleLogout}
               />
             </>

@@ -1,25 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { couriers } from '../data/users.js';
-import { initialOrders } from '../data/orders.js';
 
-export default function Orders({ currentUser, onLogout }) {
-  const [orders, setOrders] = useState(initialOrders);
+export default function Orders({ currentUser, orders, onTake, onHandOff, onLogout }) {
   const [infoOrder, setInfoOrder] = useState(null);
   const navigate = useNavigate();
-
-  function handleTake(id) {
-    setOrders(prev =>
-      prev.map(o => (o.id === id ? { ...o, courier: currentUser.name } : o))
-    );
-  }
-
-  function handleHandOff(id, newCourierName) {
-    if (!newCourierName) return;
-    setOrders(prev =>
-      prev.map(o => (o.id === id ? { ...o, courier: newCourierName } : o))
-    );
-  }
 
   function handleLogout() {
     onLogout();
@@ -59,7 +44,7 @@ export default function Orders({ currentUser, onLogout }) {
                 </td>
                 <td className="orders-actions">
                   {isFree && (
-                    <button type="button" onClick={() => handleTake(order.id)}>
+                    <button type="button" onClick={() => onTake(order.id)}>
                       Взять себе
                     </button>
                   )}
@@ -67,7 +52,7 @@ export default function Orders({ currentUser, onLogout }) {
                   {isMine && (
                     <select
                       defaultValue=""
-                      onChange={e => handleHandOff(order.id, e.target.value)}
+                      onChange={e => onHandOff(order.id, e.target.value)}
                     >
                       <option value="" disabled>
                         Отдать другому курьеру
